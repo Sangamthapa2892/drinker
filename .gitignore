@@ -1,0 +1,5 @@
+*.json
+.env
+db.py
+dump.py
+db.sqlite3

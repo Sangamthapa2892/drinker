@@ -1,0 +1,165 @@
+{% extends "base.html" %}
+{% load static %}
+<!-- banner -->
+{% block extra_css %}
+  <style>
+    body {
+      color: #fff;
+      margin: 0;
+      padding: 0;
+    }
+  
+    .about {
+      background-image: url('.images/about_img.jpg');
+      background-position: center;
+      background-size: cover;
+      padding: 80px 0;
+      text-align: center;
+      border-radius: 10px;
+    }
+  
+    .about .container {
+      margin-bottom: 20px;
+      padding-top: 10px;
+      max-width: 1000px;
+      margin: 0 auto;
+      background: #fff;
+      /* White background */
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0px 4px 10px rgba(255, 0, 0, 0.3);
+      /* Subtle red glow */
+    }
+  
+    .about .titlepage h2 {
+      font-size: 36px;
+      font-weight: bold;
+      color: #fff;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      margin-top: 30px;
+    }
+  
+    .about .titlepage h2 .red {
+      color: #d32f2f;
+    }
+  
+    .about p {
+      font-size: 18px;
+      color: #333;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+  
+    .about .read_more {
+      display: inline-block;
+      padding: 12px 24px;
+      font-size: 16px;
+      font-weight: bold;
+      text-decoration: none;
+      color: #fff;
+      background: #d32f2f;
+      border-radius: 5px;
+      transition: all 0.3s ease-in-out;
+    }
+  
+    .about .read_more:hover {
+      background: #a91414;
+      transform: scale(1.05);
+    }
+  
+    .about img {
+      max-width: 100%;
+      /* Ensures the image is responsive */
+      height: auto;
+      /* Height auto adjusts for aspect ratio */
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+  
+    /* Media Queries for Responsiveness */
+    @media (max-width: 768px) {
+      .about .titlepage h2 {
+        font-size: 28px;
+        /* Adjust font size for smaller screens */
+      }
+  
+      .about p {
+        font-size: 16px;
+        /* Slightly smaller text for mobile */
+      }
+  
+      .about .container {
+        padding: 20px;
+        /* Reduced padding on smaller screens */
+      }
+  
+      .about .read_more {
+        font-size: 14px;
+        /* Smaller button text */
+        padding: 10px 20px;
+        /* Smaller padding on the button */
+      }
+  
+      /* Stack images vertically on mobile */
+      .about img {
+        width: 90%;
+        /* Make sure the image doesn't overflow */
+        margin-bottom: 15px;
+        /* Less margin between image and text */
+      }
+    }
+  
+    @media (max-width: 480px) {
+      .about .titlepage h2 {
+        font-size: 24px;
+        /* Further adjust font size for very small screens */
+      }
+  
+      .about p {
+        font-size: 14px;
+        /* Further reduce font size for small screens */
+      }
+  
+      .about .container {
+        padding: 15px;
+        /* Even smaller padding */
+      }
+    }
+  </style>
+{% endblock extra_css %}
+{% block content %}
+<!-- About Section -->
+<div id="about" class="about">
+  <div class="titlepage">
+    <h2><span class="white">About Store</span></h2>
+  </div>
+  <div class="container">
+    <!-- Image added here -->
+    <img src="{% static 'images/about_img.jpg' %}" alt="Store Image" />
+    <!-- Replace with the correct image path -->
+
+    <p>
+      Welcome to our store! We bring you the finest selection of wines, sourced
+      from the best vineyards around the world. Whether you're a connoisseur or
+      a casual enthusiast, our collection features a variety of bold reds,
+      smooth blacks, and crisp whites to suit your taste.
+    </p>
+    <p>
+      Our team is passionate about quality and taste, ensuring that every bottle
+      in our store is handpicked for an unforgettable experience. From classic
+      favorites to exclusive limited editions, we have something special for
+      every occasion.
+    </p>
+
+    <!-- New paragraph added here -->
+    <p>
+      We are committed to providing a unique shopping experience and the best
+      customer service. Feel free to browse our wide range of products and reach
+      out if you need any assistance. Enjoy your shopping!
+    </p>
+
+    <a class="read_more" href="#">Read More</a>
+  </div>
+</div>
+{% endblock content %}

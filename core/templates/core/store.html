@@ -1,0 +1,242 @@
+{% extends "base.html" %}
+{% load static %}
+{% block extra_css %}
+<!-- banner -->
+<style>
+    body {
+        background-color: #000;
+    }
+
+    .category-buttons ul {
+        list-style: none;
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        padding: 0;
+    }
+
+    .category-buttons ul li {
+        display: inline-block;
+    }
+
+    .category-buttons ul li a {
+        display: inline-block;
+        padding: 12px 20px;
+        font-size: 16px;
+        font-weight: bold;
+        color: #fff;
+        background-color: red !important;
+        border-radius: 25px;
+        text-decoration: none;
+        transition: background 0.3s ease;
+    }
+
+    .category-buttons ul li a:hover,
+    .category-buttons ul li a.active {
+        background-color: darkred !important;
+    }
+
+    /* Store Box Styles */
+    .store_box {
+        background-color: #fff;
+        padding: 25px;
+        border-radius: 10px;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        text-align: center;
+        transition: transform 0.3s, box-shadow 0.3s;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 100%;
+        max-width: 350px;
+        margin: auto;
+
+    }
+
+    .store_box:hover {
+        transform: scale(0.98);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
+    }
+
+    /* Store Box Image */
+    .store_box figure {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0;
+        padding: 15px;
+        height: 220px;
+    }
+
+    .store_box figure img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+        border-radius: 8px;
+    }
+
+    /* Store Box Content */
+    .store_box h3 {
+        font-size: 24px;
+        color: #d10024;
+        font-weight: bold;
+        margin-top: 15px;
+    }
+
+    .store_box p {
+        font-size: 16px;
+        color: #333;
+        margin-bottom: 10px;
+    }
+
+    .store_box .price {
+        font-size: 22px;
+        font-weight: bold;
+        color: #000;
+        margin-bottom: 15px;
+    }
+
+    /* Add-to-Cart Button */
+    .store_box .add-to-cart {
+        padding: 12px 20px;
+        background-color: #d10024;
+        color: #fff;
+        font-size: 18px;
+        font-weight: bold;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: all 0.3s ease-in-out;
+    }
+
+    .store_box .add-to-cart:hover {
+        background: #640404;
+        transform: scale(1.05);
+    }
+
+    /* Wine Listing Grid */
+
+    .col-md-4 {
+        flex: 1 1 30%;
+        max-width: 30%;
+        display: flex;
+        justify-content: center;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 992px) {
+        .col-md-4 {
+            flex: 1 1 45%;
+            max-width: 45%;
+        }
+    }
+
+    @media (max-width: 768px) {
+        h2 {
+            font-size: 36px;
+        }
+
+        .col-md-4 {
+            flex: 1 1 100%;
+            max-width: 100%;
+        }
+
+        .store_box {
+            padding: 20px;
+        }
+    }
+
+    @media (max-width: 576px) {
+        h2 {
+            font-size: 30px;
+        }
+
+        .store_box {
+            padding: 15px;
+        }
+
+        .store_box h3 {
+            font-size: 20px;
+        }
+
+        .store_box p {
+            font-size: 14px;
+        }
+
+        .store_box .price {
+            font-size: 18px;
+        }
+
+        .store_box .add-to-cart {
+            font-size: 16px;
+        }
+    }
+</style>
+{% endblock extra_css %}
+{% block content %}
+<div class="container">
+    <h2 class="text-center text-light">Wine Categories</h2>
+    <div class="category-buttons">
+        <ul class="d-flex flex-wrap gap-5 mb-3">
+            <li>
+                <a href="{% url 'store' %}"
+                    class="px-4 py-2 rounded-pill border-0 small fw-medium {% if not selected_category %}active{% endif %}">
+                    All
+                </a>
+            </li>
+            {% for category in categories %}
+            <li>
+                <a href="?category={{ category.name }}"
+                    class="px-4 py-2 rounded-pill border-0 small fw-medium {% if selected_category == category.name %}active{% endif %}">
+                    {{ category.name }}
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <p class="text-dark">
+        Selected Category:
+        {% if selected_category %}
+        {{ selected_category }}
+        {% else %}
+        All
+        {% endif %}
+    </p>
+    {% if selected_category %}
+    {% for category in categories %}
+    {% if category.name == selected_category %}
+    <p class="text-muted small">{{ category.description }}</p>
+    {% endif %}
+    {% endfor %}
+    {% else %}
+    <p class="text-muted small">Showing all liquors across categories.</p>
+    {% endif %}
+    <div class="row py-5">
+        {% for liquor in liquors %}
+        <div class="col-md-4 mb-5">
+            <div class="store_box">
+                <figure>
+                    <img src="{{liquor.image.url}}" class="img-fluid" style="width: 250px;" alt="{{ liquor.name }}">
+                </figure>
+                <h3>{{ liquor.name }}</h3>
+                <div class="card-text">
+                    <strong>Category:</strong> {{ liquor.category.name }}<br>
+                    <strong>Region:</strong> {{ liquor.region }}<br>
+                    <strong>Vintage:</strong> {{ liquor.vintage }}<br>
+                    <strong>Alcohol:</strong> {{ liquor.alcohol_content }}%<br>
+                    <strong>Price:</strong> Rs {{ liquor.price }}<br>
+                    <strong>Producer:</strong> {{ liquor.producer }}<br>
+                    <button class="add-to-cart mt-1"
+                        onclick="addToCart('{{ liquor.id }}', '{{ liquor.name }}', '{{ liquor.price }}')">
+                        Add to Cart
+                    </button>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <p class="text-light">No liquors found in this category.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock content %}

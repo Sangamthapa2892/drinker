@@ -1,0 +1,159 @@
+{% extends 'admin/base_site.html' %}
+{% load static %}
+
+{% block title %}Broadcast Email{% endblock %}
+
+{% block content %}
+<style>
+    .broadcast-wrapper {
+        max-width: 550px;
+        margin: 40px auto;
+        padding: 30px;
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-family: 'Segoe UI', sans-serif;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .broadcast-title {
+        font-size: 24px;
+        margin-bottom: 30px;
+        font-weight: 600;
+        color: #2c3e50;
+    }
+
+    .broadcast-form .form-row {
+        margin-bottom: 20px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .broadcast-form label {
+        font-weight: 600;
+        margin-bottom: 6px;
+        color: #333;
+    }
+
+    .broadcast-form input[type="text"],
+    .broadcast-form textarea {
+        padding: 10px;
+        font-size: 15px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        width: 100%;
+        max-width: 528px;
+        background-color: #fdfdfd;
+        transition: border-color 0.3s ease;
+    }
+
+    .broadcast-form input:focus,
+    .broadcast-form textarea:focus {
+        border-color: #6c63ff;
+        outline: none;
+    }
+
+    .broadcast-form button.default {
+        background-color: #0c4b33;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .broadcast-form button.default:hover {
+        background-color: #097c5c;
+    }
+
+    .broadcast-form button.default:focus {
+        outline: 2px solid #0c4b33;
+    }
+
+    .broadcast-form a.button {
+        margin-left: 10px;
+        padding: 10px 20px;
+        background-color: #e0e0e0;
+        border-radius: 4px;
+        text-decoration: none;
+        color: #333;
+        font-weight: bold;
+    }
+
+    @media (max-width: 600px) {
+        .broadcast-wrapper {
+            padding: 20px;
+        }
+
+        .broadcast-form input[type="text"],
+        .broadcast-form textarea {
+            max-width: 100%;
+        }
+
+        .broadcast-form button.default,
+        .broadcast-form a.button {
+            width: 100%;
+            margin-top: 10px;
+        }
+    }
+
+    .broadcast-messages {
+        list-style: none;
+        padding: 0;
+        margin-bottom: 20px;
+    }
+
+    .broadcast-messages li {
+        padding: 10px;
+        border-radius: 4px;
+        margin-bottom: 10px;
+    }
+
+    .broadcast-messages .success {
+        background-color: #d4edda;
+        color: #155724;
+    }
+
+    .broadcast-messages .error {
+        background-color: #f8d7da;
+        color: #721c24;
+    }
+
+    .broadcast-messages .info {
+        background-color: #d1ecf1;
+        color: #0c5460;
+    }
+</style>
+
+<div class="broadcast-wrapper">
+    <h1 class="broadcast-title">📢 Send Broadcast Email</h1>
+
+    {% if messages %}
+    <ul class="broadcast-messages">
+        {% for message in messages %}
+        <li class="{{ message.tags }}">{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+    <form method="POST" class="broadcast-form">
+        {% csrf_token %}
+        <div class="form-row">
+            <label for="subject">Subject:</label>
+            <input type="text" name="subject" id="subject" placeholder="Enter email subject..." required>
+        </div>
+
+        <div class="form-row">
+            <label for="message">Message:</label>
+            <textarea name="message" id="message" rows="6" placeholder="Write your message here..." required></textarea>
+        </div>
+
+        <div class="form-row">
+            <button type="submit" class="default">Send to All Subscribers</button>
+        </div>
+    </form>
+</div>
+{% endblock %}
