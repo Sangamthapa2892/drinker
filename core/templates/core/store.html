@@ -203,6 +203,7 @@
         All
         {% endif %}
     </p>
+    
     {% if selected_category %}
     {% for category in categories %}
     {% if category.name == selected_category %}
@@ -212,6 +213,13 @@
     {% else %}
     <p class="text-muted small">Showing all liquors across categories.</p>
     {% endif %}
+    <div class="d-flex gap-3">
+        <form action="" method="get">
+            <input type="text" class="input" name="search" placeholder="enter ">
+            <button class="btn btn-outline-primary rounded"
+                style="border-radius: 50px !important; padding: 10px 15px; margin-left: 15px;" type="submit">Search</button>
+        </form>
+    </div>
     <div class="row py-5">
         {% for liquor in liquors %}
         <div class="col-md-4 mb-5">

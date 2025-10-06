@@ -9,7 +9,11 @@ from django.contrib.auth.views import PasswordResetView
 from django.core.mail import send_mail
 from django.urls import reverse_lazy
 from django.conf import settings
+from django.core.exceptions import ValidationError
 import re
+
+import logging
+logger=logging.getLogger('django')
 
 # Create your views here.
 def is_valid_email(email):
@@ -68,20 +72,23 @@ def about(request):
 def store(request):
     liquors = Liquor.objects.all()
     categories = LiquorCategory.objects.all()
+    
+    search_query = request.GET.get('search')
     selected_category = request.GET.get('category')
 
+    if search_query:
+        liquors = liquors.filter(name__icontains=search_query)
+
     if selected_category:
-        liquors = Liquor.objects.filter(category__name=selected_category)
-    else:
-        liquors = Liquor.objects.all()
+        liquors = liquors.filter(category__name=selected_category)
 
     context = {
-        'categories':categories,
-        'liquors':liquors,
+        'categories': categories,
+        'liquors': liquors,
         'selected_category': selected_category,
-
+        'search_query': search_query,
     }
-    return render(request,'core/store.html',context)
+    return render(request, 'core/store.html', context)
 
 def review(request):
     testimonials = Testimonial.objects.all()
@@ -154,14 +161,17 @@ def login_view(request):
         username = request.POST.get('username')
         password = request.POST.get('password')
         next_url = request.POST.get('next') or '/'
+        try:
+            user = authenticate(request, username=username, password=password)
 
-        user = authenticate(request, username=username, password=password)
-
-        if user is not None:
-            login(request, user)
-            return JsonResponse({'success': True, 'redirect': next_url})
-        else:
-            return JsonResponse({'success': False, 'error': 'Invalid username or password'})
+            if user is not None:
+                login(request, user)
+                return JsonResponse({'success': True, 'redirect': next_url})
+            else:
+                return JsonResponse({'success': False, 'error': 'Invalid username or password'})
+        except Exception as e:
+            logger.error(e,exc_info=True)
+    
 
     return JsonResponse({'success': False, 'error': 'Invalid request type'})
 
@@ -184,22 +194,26 @@ def register_view(request):
 
         if User.objects.filter(email=email).exists():
             return JsonResponse({'success': False, 'error': 'Email already registered!'})
-
-        user = User.objects.create_user(
-            username=uname,
-            email=email,
-            password=password1,
-            first_name=fname,
-            last_name=lname
-        )
-        user.save()
-        send_mail(
-                subject='Thank you for contacting us!',
-                message=f"Hi {uname},\n\nThankyou for connecting with us !!!\n\nCheers,\nTeam",
-                from_email=None,  # Uses DEFAULT_FROM_EMAIL
-                recipient_list=[email],
-                fail_silently=False,
+        try:
+            user = User.objects.create_user(
+                username=uname,
+                email=email,
+                password=password1,
+                first_name=fname,
+                last_name=lname
             )
+            user.save()
+            send_mail(
+                    subject='Thank you for contacting us!',
+                    message=f"Hi {uname},\n\nThankyou for connecting with us !!!\n\nCheers,\nTeam",
+                    from_email=None,  # Uses DEFAULT_FROM_EMAIL
+                    recipient_list=[email],
+                    fail_silently=False,
+                )
+        except Exception as e:
+            logger.error(e,exc_info=True)
+
+    
 
         return JsonResponse({'success': True})
 

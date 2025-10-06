@@ -180,3 +180,34 @@ DEFAULT_FROM_EMAIL = 'sangamthapa2892@gmail.com'
 
 
 # Add logging to see email sending attempts
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'timestamp': {
+            'format': '{asctime} - {levelname} - {message}',
+            'style': '{',  # Ensure the style matches the format (e.g., { for Python 3.2+)
+        },
+    },
+    'handlers': {
+        
+        'file': {
+            'level': 'ERROR',  # Only log errors
+            'class': 'logging.FileHandler',
+            'filename': 'debug.log',  # Log file
+            'formatter': 'timestamp',  # Use the verbose formatter
+        },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'timestamp',  # Refers to the 'timestamp' formatter
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}
