@@ -46,7 +46,7 @@ python manage.py migrate
 ```bash
 python manage.py runserver
 ```
-🔐 Environment Variable
+🔐 Environment Variable<br>
 Your .env file should include:
 ```
 SECRET_KEY=your-secret-key
